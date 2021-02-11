@@ -18,5 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
-Route::get('/add-to-cart/{id}', 'App\Http\Controllers\CartController@addToCart')->name('add-to-cart');
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
+
+    Route::get('/add-to-cart/{id}', 'App\Http\Controllers\CartController@addToCart')->name('add-to-cart');
+
+    Route::post('/place-order', 'App\Http\Controllers\OrderController@store')->name('place-order');
+});
+

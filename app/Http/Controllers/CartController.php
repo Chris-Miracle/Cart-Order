@@ -8,7 +8,12 @@ use Obiefy\API\Facades\API;
 
 class CartController extends Controller
 {
-    public function addToCart($id)
+    public function index()
+    {
+        return session('cart');
+    }
+
+    public function addToCart(Request $request,$id)
     {
         $product = Product::findOrfail($id);
 
@@ -32,7 +37,7 @@ class CartController extends Controller
                     ]
             ];
 
-            session()->put('cart', $cart);
+            $request->session()->put('cart', $cart);
 
             return API::response(200,'Cart has been updated', $cart);
 
@@ -43,7 +48,7 @@ class CartController extends Controller
 
             $cart[$id]['quantity']++;
 
-            session()->put('cart', $cart);
+            $request->session()->put('cart', $cart);
 
             return API::response(200,'Cart item already exist, Product Quantity updated', $cart);
 
@@ -57,7 +62,7 @@ class CartController extends Controller
             "desc" => $product->desc,
         ];
 
-        session()->put('cart', $cart);
+        $request->session()->put('cart', $cart);
 
         return API::response(200,'Cart has been added', $cart);
     }
